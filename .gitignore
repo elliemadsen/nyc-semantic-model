@@ -1,3 +1,4 @@
 *.3dm
+.DS_Store
 nyc_mappluto/*
 blocks-geodata/*
