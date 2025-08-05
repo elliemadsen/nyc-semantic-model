@@ -2,21 +2,71 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Deck.GL Mapbox Map</title>
+    <title>NYC Block Clusters</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="style.css" />
 
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='52' font-size='52'>𖣔</text></svg>"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://unpkg.com/deck.gl@^9.0.0-beta.5/dist.min.js"></script>
     <script src="https://unpkg.com/maplibre-gl@^3.0.0/dist/maplibre-gl.js"></script>
-
     <link
       href="https://unpkg.com/maplibre-gl@^3.0.0/dist/maplibre-gl.css"
       rel="stylesheet"
     />
   </head>
-
   <body>
-    <div id="map"></div>
+    <div class="main-layout">
+      <div class="sidebar">
+        <h1>Semantic || Spatial</h1>
+        <h3>Manhattan, NYC</h3>
+        <p>Map View:</p>
+        <div class="toggle-group" id="modeToggle">
+          <div id="spatialToggle" class="toggle-btn active">Spatial</div>
+          <div id="semanticToggle" class="toggle-btn">Semantic</div>
+        </div>
+        <div class="layer-controls">
+          <label
+            ><input type="checkbox" id="showBlocks" checked /> Show
+            Blocks</label
+          >
+          <label
+            ><input type="checkbox" id="showBuildings" checked /> Show
+            Buildings</label
+          >
+          <label
+            ><input type="checkbox" id="showNodes" checked /> Show Nodes</label
+          >
+          <label
+            ><input type="checkbox" id="showEdges" checked /> Show Edges</label
+          >
+          <label
+            ><input type="checkbox" id="invertLayers" /> Invert Layers</label
+          >
+        </div>
+        <div class="slider-group">
+          <label for="layerSpacingSlider" style="margin-bottom: 8px"
+            >Layer Spacing</label
+          >
+          <input
+            type="range"
+            id="layerSpacingSlider"
+            min="600"
+            max="1500"
+            value="1000"
+          />
+        </div>
+      </div>
+      <div class="map-container">
+        <div id="map"></div>
+      </div>
+    </div>
     <script src="script.js"></script>
   </body>
 </html>
