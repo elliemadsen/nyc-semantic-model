@@ -19,7 +19,6 @@ body {
   padding: 60px;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #a0a0a0;
   border-left: 1px solid #a0a0a0;
 }
 
