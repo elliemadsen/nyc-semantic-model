@@ -23,9 +23,12 @@
   </head>
   <body>
     <div class="main-layout">
+      <div class="map-container">
+        <div id="map"></div>
+      </div>
       <div class="sidebar">
-        <h1>Semantic || Spatial</h1>
-        <h3>Manhattan, NYC</h3>
+        <h2>Semantic || Spatial Networks</h2>
+        <!-- <h3>Manhattan, NYC</h3> -->
         <p>Map View:</p>
         <div class="toggle-group" id="modeToggle">
           <div id="spatialToggle" class="toggle-btn active">Spatial</div>
@@ -62,9 +65,21 @@
             value="1000"
           />
         </div>
-      </div>
-      <div class="map-container">
-        <div id="map"></div>
+        <p>
+          This project visualizes the spatial and semantic similarity of blocks
+          in Manhattan. I generated two sets of embeddings, from physical
+          features
+          <span class="small-brackets"
+            >[ building density, height, lot area, year built, etc ]</span
+          >
+          and semantic data
+          <span class="small-brackets"
+            >[ place types, names, reviews, etc ]</span
+          >. I then clustered the block embeddings with k-means and visualized
+          each cluster as a network layer. The resulting interactive web map
+          enables users to explore and compare the semantic and spatial topology
+          of Manhattan.
+        </p>
       </div>
     </div>
     <script src="script.js"></script>

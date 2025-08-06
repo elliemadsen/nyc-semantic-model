@@ -19,11 +19,55 @@ const layerToggles = {
   invertLayers: false,
 };
 
+let autoRotate = true;
+let rotateInterval = null;
+let inactivityTimeout = null;
+const ROTATE_SPEED = 0.2; // degrees per frame
+const ROTATE_INTERVAL_MS = 40; // ms between frames
+const ROTATE_RESUME_DELAY = 30000; // 30 seconds
+
+// --------------------- map rotation  ---------------------
+
+function startRotation() {
+  if (rotateInterval) return;
+  rotateInterval = setInterval(() => {
+    if (!map) return;
+    const bearing = map.getBearing();
+    map.setBearing(bearing + ROTATE_SPEED);
+  }, ROTATE_INTERVAL_MS);
+}
+
+function stopRotation() {
+  if (rotateInterval) {
+    clearInterval(rotateInterval);
+    rotateInterval = null;
+  }
+}
+
+function resetInactivityTimer() {
+  stopRotation();
+  if (inactivityTimeout) clearTimeout(inactivityTimeout);
+  inactivityTimeout = setTimeout(() => {
+    startRotation();
+  }, ROTATE_RESUME_DELAY);
+}
+
+// Attach listeners after map is initialized
+function setupRotationListeners() {
+  startRotation();
+  // Pause rotation on any mouse interaction
+  ["mousedown", "touchstart", "touchmove"].forEach((evt) => {
+    map.on(evt, resetInactivityTimer);
+  });
+}
+
+// --------------------- map layers  ---------------------
+
 // Update elevation by user input slider for layer spacing
 const get_elevation = (cluster) => {
   const baseline = 2000;
   if (layerToggles.invertLayers) {
-    return cluster * layer_spacing + baseline;
+    return (cluster + 1) * layer_spacing + baseline;
   }
   return (n_layers - cluster) * layer_spacing + baseline;
 };
@@ -147,7 +191,8 @@ function getLayers(mode) {
   });
 });
 
-//  event listeners
+// --------------------- event listeners  ---------------------
+
 document.getElementById("spatialToggle").addEventListener("click", () => {
   currentMode = "spatial";
   document.getElementById("spatialToggle").classList.add("active");
@@ -202,4 +247,4 @@ async function initMap() {
   });
 }
 
-initMap();
+initMap().then(setupRotationListeners);
