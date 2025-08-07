@@ -17,21 +17,21 @@ const layerToggles = {
   showNodes: true,
   showEdges: true,
   invertLayers: false,
+  rotateMap: true,
 };
 
-let autoRotate = true;
 let rotateInterval = null;
 let inactivityTimeout = null;
 const ROTATE_SPEED = 0.2; // degrees per frame
 const ROTATE_INTERVAL_MS = 40; // ms between frames
-const ROTATE_RESUME_DELAY = 30000; // 30 seconds
+const ROTATE_RESUME_DELAY = 20000; // 20 seconds
 
 // --------------------- map rotation  ---------------------
 
 function startRotation() {
-  if (rotateInterval) return;
+  if (rotateInterval || !layerToggles.rotateMap) return;
   rotateInterval = setInterval(() => {
-    if (!map) return;
+    if (!map || !layerToggles.rotateMap) return;
     const bearing = map.getBearing();
     map.setBearing(bearing + ROTATE_SPEED);
   }, ROTATE_INTERVAL_MS);
@@ -181,14 +181,20 @@ function getLayers(mode) {
 ].forEach((id) => {
   document.getElementById(id).addEventListener("change", (e) => {
     layerToggles[id] = e.target.checked;
-    console.log(`${id} is now:`, layerToggles[id]);
 
     if (deckOverlay) {
-      console.log("Updating layers with current mode:", currentMode);
-
       deckOverlay.setProps({ layers: getLayers(currentMode) });
     }
   });
+});
+
+document.getElementById("rotateMap").addEventListener("change", (e) => {
+  layerToggles.rotateMap = e.target.checked;
+  if (layerToggles.rotateMap) {
+    startRotation();
+  } else {
+    stopRotation();
+  }
 });
 
 // --------------------- event listeners  ---------------------
