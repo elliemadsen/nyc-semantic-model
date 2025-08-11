@@ -4,13 +4,15 @@
 
 this project generates comparative visualizations of the spatial and semantic similarity of blocks in new york city's manhattan borough.
 
+check out the webmap --> https://elliemadsen.github.io/nyc-semantic-model/
+
 ## data
 
 block data is from https://data.cityofnewyork.us/City-Government/2020-Census-Blocks/wmsu-5muw/about_data
-(blocks-geodata/...)
+(`blocks-geodata/...`)
 
 building footprints and attributes data is from https://www.nyc.gov/content/planning/pages/resources/datasets/mappluto-pluto-change
-(nyc_mappluto/...)
+(`nyc_mappluto/...`)
 
 3d model is from https://www.nyc.gov/content/planning/pages/resources/datasets/nyc-3d-model
 
@@ -20,11 +22,17 @@ semantic data is from Google's Places API.
 
 ### grasshopper
 
-Starting with the UWS neighborhood to reduce computational load, I mapped each building (.3dm) to its block (census data .shp). I then generated per-block spatial attributes, such as density, area, and height. I wrote a custom python script component to run k-means on these features, coloring each building by its cluster.
+To begin, I limited my Grasshopper analysis to the Upper West Side neighborhood to reduce the computational load inflicted by the high cardinality of buildings and blocks. I retrieved building geometries from the NYC Open Data 3dm model and block boundaries from the 2020 Census Data shapefile. After mapping buildings to block, I generated per-block spatial attributes, including density, area, and height. I wrote a custom python script component to run k-means clustering on these features. Buildings are colored by block cluster.
 
-See `model/uws-block-k-means.ghx`.
+See `model/uws-cluster-blocks.ghx`.
 
-![NYC Spatial Model UWS](viz/animation/animation_final.gif)
+![UWS Spatial Model](viz/animation_uws.gif)
+
+I then expanded my analysis to all of Manhattan. Because the 3d model was too complex to scale, I switched to using MapPLUTO as the data source and simply extruded the building footprints by a factor of floor number. I filtered relevant inputs, including average area (lot, building, etc.), FAR (building, residential, commercial), number of buildings, number of floors, number of units, and year built. I used these attributes to cluster the blocks with k-means and color the buildings accordingly.
+
+See `model/manhattan-cluster-blocks.ghx`.
+
+![MN Spatial Model](viz/frames_manhattan/10_clusters.png)
 
 ### python
 
@@ -32,7 +40,7 @@ I used Python libraries `geopandas`, `scikit-learn`, and `SentenceTransformers` 
 
 I created a network for each cluster by creating edges between each block its 5 nearest neighbors (based on geographic distance) in that cluster. I then exported the data to `webmap-geodata/` in a series of geojson files: buildings, blocks, nodes, semantic network, and spatial network.
 
-See `scripts/`.
+See `scripts/gen_places_data.ipynb` and `scripts/map_embeddings.ipynb`.
 
 ![matplotlib viz](viz/manhattan_clusters.png)
 
