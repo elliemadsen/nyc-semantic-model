@@ -5,19 +5,21 @@ async function loadGeoJSON(url) {
   return await response.json();
 }
 
+const baseline_spacing = 800;
+
 let currentMode = "spatial"; // "spatial" or "semantic"
 let blocks, buildings, nodes, spatial_edges, semantic_edges;
 let map, deckOverlay;
-let layer_spacing = 1000;
+let layer_spacing = baseline_spacing;
 let n_layers = 8;
 
 const layerToggles = {
   showBlocks: true,
   showBuildings: true,
   showNodes: true,
-  showEdges: true,
+  showEdges: false,
   invertLayers: false,
-  rotateMap: true,
+  rotateMap: false,
 };
 
 let rotateInterval = null;
@@ -54,7 +56,6 @@ function resetInactivityTimer() {
 
 // Attach listeners after map is initialized
 function setupRotationListeners() {
-  startRotation();
   // Pause rotation on any mouse interaction
   ["mousedown", "touchstart", "touchmove"].forEach((evt) => {
     map.on(evt, resetInactivityTimer);
@@ -65,11 +66,10 @@ function setupRotationListeners() {
 
 // Update elevation by user input slider for layer spacing
 const get_elevation = (cluster) => {
-  const baseline = 2000;
   if (layerToggles.invertLayers) {
-    return (cluster + 1) * layer_spacing + baseline;
+    return (cluster + 1) * layer_spacing + baseline_spacing;
   }
-  return (n_layers - cluster) * layer_spacing + baseline;
+  return (n_layers - cluster) * layer_spacing + baseline_spacing;
 };
 
 const lightenColor = (color, amount = 0.5) => {
@@ -116,7 +116,7 @@ function blockLayer(mode) {
     pickable: true,
     extruded: false,
     stroked: true,
-    getLineColor: [0, 0, 0, 200],
+    getLineColor: [255, 255, 255, 200], // white block borders
     lineWidthMinPixels: 1,
   });
 }
@@ -230,9 +230,9 @@ async function initMap() {
 
   map = new maplibregl.Map({
     container: "map",
-    style: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
-    center: [-73.97, 40.8],
-    zoom: 11,
+    style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+    center: [-73.99, 40.76],
+    zoom: 11.7,
     pitch: 90,
     antialias: true,
   });

@@ -2,12 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>NYC Block Clusters</title>
+    <title>Spatially and Semantically Clustering Manhattan</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <link
       rel="icon"
-      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='52' font-size='52'>🏙️</text></svg>"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='52' font-size='52'>🌐</text></svg>"
     />
     <link rel="stylesheet" href="style.css" />
     <link
@@ -27,8 +27,7 @@
         <div id="map"></div>
       </div>
       <div class="sidebar">
-        <h2>Semantic || Spatial Networks</h2>
-        <!-- <h3>Manhattan, NYC</h3> -->
+        <h2>Spatially and Semantically Clustering Manhattan</h2>
         <p>Map View:</p>
         <div class="toggle-group" id="modeToggle">
           <div id="spatialToggle" class="toggle-btn active">Spatial</div>
@@ -46,16 +45,11 @@
           <label
             ><input type="checkbox" id="showNodes" checked /> Show Nodes</label
           >
-          <label
-            ><input type="checkbox" id="showEdges" checked /> Show Edges</label
-          >
+          <label><input type="checkbox" id="showEdges" /> Show Edges</label>
           <label
             ><input type="checkbox" id="invertLayers" /> Invert Layers</label
           >
-          <label
-            ><input type="checkbox" id="rotateMap" checked /> Auto Rotate
-            Map</label
-          >
+          <label><input type="checkbox" id="rotateMap" /> Rotate Map</label>
         </div>
         <div class="slider-group">
           <label for="layerSpacingSlider" style="margin-bottom: 8px"
@@ -66,18 +60,27 @@
             id="layerSpacingSlider"
             min="600"
             max="1500"
-            value="1000"
+            value="800"
           />
         </div>
         <p>
-          This project visualizes the spatial and semantic similarity of blocks
-          in Manhattan. I generated two sets of embeddings, from physical
-          features
+          The map visualizes the spatial and semantic similarity of blocks in
+          Manhattan. Two sets of embeddings, generated from physical features
           <span class="small-brackets"
             >[building density, height, lot area, year built, etc]</span
           >
           and semantic data
           <span class="small-brackets">[place types, names, reviews, etc]</span
+          >, were clustered using k-means and visualized
+          as nearest neighbor networks. The resulting interactive web map
+          enables users to explore and compare the semantic and spatial topology
+          of Manhattan.
+        </p>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
           >. I then clustered the block embeddings with k-means and visualized
           each cluster as a network layer. The resulting interactive web map
           enables users to explore and compare the semantic and spatial topology

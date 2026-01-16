@@ -1,4 +1,5 @@
 *.3dm
 .DS_Store
-nyc_mappluto/*
+nyc_mappluto*/*
 blocks-geodata/*
+.vscode/
